@@ -6,7 +6,7 @@ const nodemailer = require('nodemailer');
 // Signup
 exports.signup = async (req, res) => {
   const { email, password } = req.body;
-
+  console.log("Signup",email,password);
   try {
     let user = await User.findOne({ email });
     console.log("Checking User",user);

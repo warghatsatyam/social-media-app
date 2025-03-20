@@ -8,11 +8,24 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage('Sending request...');
+    
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/signup', { email, password });
-      setMessage(res.data.message);
+      const response = await axios.post('http://localhost:5000/api/auth/signup', 
+        { email, password },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      console.log('Response:', response.data);
+      setMessage(response.data.message);
+      
     } catch (error) {
-      setMessage(error.response.data.error);
+      console.error('Error details:', error);
+      setMessage(error.response?.data?.error || 'An error occurred during signup');
     }
   };
 

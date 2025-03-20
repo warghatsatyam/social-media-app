@@ -1,17 +1,29 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 
 const app = express();
 
-// Connect to MongoDB
+// CORS configuration
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+app.use(cors(corsOptions));
+
+// Log all requests for debugging
+app.use((req, res, next) => {
+  console.log(`${req.method} request to ${req.url}`);
+  next();
+});
+
 connectDB();
-
-// Middleware
 app.use(express.json());
-
-// Routes
+app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 5000;
